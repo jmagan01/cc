@@ -4,6 +4,9 @@
 # Coursework log
 
 [29/March/2020]
+================================================================
+Initial Setup
+================================================================
 - create a new virtual environment (cw-env) and activate it
 - install the following packages: 
 	+ Django 3.0.3
@@ -12,131 +15,47 @@
 - setup a new Django project called "cwsite"
 - change the name of the folder to src.
 
+================================================================
+Implement version control via GitHub
+================================================================
 - create a new repo in GitHub called "cc"
 - configure user name (jmagan01) and user email
 - initialize git with /home/student/cw-env/src/
 - cd src and clone the git repository using the HTTP URL
 - add the repository as origin
-- commit and push changes
+- commit and push chanegs -m "create Django project"
 - create change.log and readme.md
-- commit and push changes
+- commit and push chanegs -m "add a change.log and readme.md" 
+
+================================================================
+Development of an authorization server
+================================================================
 - make a number of changes in the settings.py file
-	+ ALLOWED_HOSTS
-	+ Set the oAuth and the rest_framework in the INSTALLED_APPS
+	+ add ip to the ALLOWED_HOSTS
+	+ set the oAuth and the rest_framework in the INSTALLED_APPS
 	+ add a new middleware (oauth2_provider.middleware)
 	+ add a REST_FRAEWORK section code
 	+ add an AUTHENTICATION_BACKENDS section code
-- add the OAuth2 provider to urls.py, this create a new url:
-	http://IP:8000/o (“o” for “oAuth”))
+- add OAuth2 provider to the urls.py file,
+	this creates the url: http://IP:8000/o (“o” for “oAuth”))
 - run migrations
 - create superuser (admin)
+- commit and push changes -m "create an authorisation server"
 
-
-
-
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-[14/March/2020]
-- SETUP A VIRTUAL ENVIRONMENT (coursework-env) to build our Django application in isolation from the rest of the VM modules.
-- Activate the environment
-- install Django 3.0.2
-
-NEW GIT REPOSITORY
-- Log in GitHub and create a new repository called "cc-cw". The HTTPS link is shown below:
-https://github.com/jmagan01/cc-cw.git
-- Initialize git (git init) with a folder e.g. the virtual environment directory.
-- Clone the git repository using the HTTPS URL
-- Add the repository as origin ($ git remote add origin https://github.com/jmagan01/cc-cw.git)
-- Add (git add) the cc-cw folder to the origin
-
-CREATE A NEW DJANGO PROJECT (auctionsys) inside the cc-cw folder
-- Rename the root project folder as src to avoid confusion
-- Add and commit and commit changes to the origin
-- Push the files to the repository
-
-[15/March/2020]
-- Rename directories to use short names
-coursework-env -> cw-env
-coursework -> cw
-- Activate the environment
-- CREATE AN AUTHORIZATION SERVER
-- Install the Django REST framework and the Django oAuth toolkit
-- Enter to src and edit the auctionsys/settings.py file
-	ALLOWED_HOST = ['193.61.36.152']
-	INSTALLED_APPS = [ ... 
-		'oauth2_provider', # The OAuth2 
-		'rest_framework', # The REST API 
-		]
-	MIDDLEWARE = [ ... 
-		# This is already there! 
-		'django.contrib.sessions.middleware.SessionMiddleware', 
-		# This should be exactly after the SessionMiddleware! 
-		'oauth2_provider.middleware.OAuth2TokenMiddleware', 
-		... ]
-	REST_FRAMEWORK = { 
-		'DEFAULT_AUTHENTICATION_CLASSES': (
-			'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
-				'rest_framework.authentication.SessionAuthentication',
-		),
-		'DEFAULT_PERMISSION_CLASSES': (
-			'rest_framework.permissions.IsAuthenticated',
-		),
-	}
-	AUTHENTICATION_BACKENDS = (
-		'django.contrib.auth.backends.ModelBackend',
-		'oauth2_provider.backends.OAuth2Backend',
-	)
-
-- Add your OAuth2 provider, edit the urls.py to create a new URL in the form http://IP:8000/o where “o” is the 
-- resource for performing the authentication phase (“o” for “oAuth”). 
-	from django.urls import path, include
-	urlpatterns = [
-		path('admin/', admin.site.urls),
-		path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
-	]
-
-- run migrations (makemigrations, migrate)
-- create a new user for testing (createsuperuser)
-
-CREATE A “User” APPLICATION (APPLICATION SERVER for the RESTful API)
-The “User” app is a simple user management system to create users using the API. 
-This will allow us to create users remotely, get a user token and use it to access
-resources (with data).
-- Start a new application ($ python manage.py startapp users)
-- Add the new app to the INSTALLED_APPS in settings.py
-- Create a new serializer.py to model our user data
-- Enter in the Django admin panel and register a new application
-- Create the API views (views.py) for the user application in order to allow the following calls:
-	* Register a new user
-	* Get a token (login)
-	* Refresh a token (next time login)
-	* Revoke a token (log out)
-- Create a new file in the users app called urls.py
-- Add the authentication url to you main app (auctionsys/urls.py)
-- Create new users using the API interface from the URL
-  http://193.61.36.152:8000/authentication/register/
-
-
-	
-
-
-
+================================================================
+Development of an application server (“User” application)
+================================================================
+- create a new 'users' application
+- add the users a application to settings.py
+- create a new serializer to model our user data
+- enter in the Django admin panel and register a new application
+- create the API views (use “views.py” from dropbox) for the user
+	application in order to allow:
+	+ Register a new user
+	+ Get a token (login)
+	+ Refresh a token (next time login)
+	+ Revoke a token (log out)
+- create a new file in the users app called urls.py.
+- add the authentication url to the main app.
+- create new users using the API interface.
+- commit and push changes -m "create a new 'users' application"
