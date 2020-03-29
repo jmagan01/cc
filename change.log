@@ -4,20 +4,32 @@
 # Coursework log
 
 [29/March/2020]
-- Create a new virtual environment (cw-env) and activate it
-- Install the following packages: 
+- create a new virtual environment (cw-env) and activate it
+- install the following packages: 
 	+ Django 3.0.3
 	+ Django REST framwork
 	+ Django oAuth toolkit
-- Setup a new Django project called "cwsite"
-- Change the name of the folder to src.
+- setup a new Django project called "cwsite"
+- change the name of the folder to src.
 
-- Create a new repo in GitHub called "cc"
-- Configure user name (jmagan01) and user email
-- Initialize git with /home/student/cw-env/src/
+- create a new repo in GitHub called "cc"
+- configure user name (jmagan01) and user email
+- initialize git with /home/student/cw-env/src/
 - cd src and clone the git repository using the HTTP URL
-- Add the repository as origin
-	
+- add the repository as origin
+- commit and push changes
+- create change.log and readme.md
+- commit and push changes
+- make a number of changes in the settings.py file
+	+ ALLOWED_HOSTS
+	+ Set the oAuth and the rest_framework in the INSTALLED_APPS
+	+ add a new middleware (oauth2_provider.middleware)
+	+ add a REST_FRAEWORK section code
+	+ add an AUTHENTICATION_BACKENDS section code
+- add the OAuth2 provider to urls.py, this create a new url:
+	http://IP:8000/o (“o” for “oAuth”))
+- run migrations
+- create superuser (admin)
 
 
 
