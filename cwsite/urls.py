@@ -1,4 +1,4 @@
-"""cwsite URL Configuration
+u"""cwsite URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.0/topics/http/urls/
@@ -20,4 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')), #add OAuth2 provider
     path('authentication/', include('users.urls')),
+    path('', include('cwapi.urls')),
 ]

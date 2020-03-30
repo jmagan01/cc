@@ -59,3 +59,36 @@ Development of an application server (“User” application)
 - add the authentication url to the main app.
 - create new users using the API interface.
 - commit and push changes -m "create a new 'users' application"
+
+[30/March/2020]
+================================================================
+Development of a resource server (Data model using Django ORM)
+================================================================
+- create a new application called 'cwapi'
+- register cwapi in the settings.py file
+- apply migrations
+- create a database (cwapi/models.py)
+	+ add a Product class
+- make migrations
+- register the Product class in the admin site (cwapi/admin.py)
+- do some dummy data entry from http://193.61.36.152:8000/admin/cwapi/product/
+
+================================================================
+Setup Django REST framework
+================================================================
+- install django rest framework
+- add “rest_framework" to cwsite/settings.py
+
+================================================================
+Serialise the model
+================================================================
+- create a new file cwapi/serializers.py
+	+ create class ProductSerializer with some fields
+
+================================================================
+Create the URI endpoints to show data
+================================================================
+- create a view to render the Products objects
+	+ edit the cwapi/views.py to query all data from the database
+- create the project URLs, link the view to a URI in cwsite/urls.py
+- create the myapi/urls.py - router creates the URI for the API
