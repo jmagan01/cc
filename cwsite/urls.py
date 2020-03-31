@@ -1,4 +1,4 @@
-u"""cwsite URL Configuration
+"""cwsite URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.0/topics/http/urls/
@@ -15,10 +15,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include #'include' added
+from rest_framework.routers import DefaultRouter
+from cwapi.views import ProductViewSet
+
+router = DefaultRouter()
+router.register('cwapi', ProductViewSet)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')), #add OAuth2 provider
     path('authentication/', include('users.urls')),
     path('', include('cwapi.urls')),
+    path('v1/', include(router.urls)), #version 1 of my API
 ]

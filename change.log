@@ -62,7 +62,7 @@ Development of an application server (“User” application)
 
 [30/March/2020]
 ================================================================
-Development of a resource server (Data model using Django ORM)
+Create a data model using Django ORM
 ================================================================
 - create a new application called 'cwapi'
 - register cwapi in the settings.py file
@@ -92,3 +92,19 @@ Create the URI endpoints to show data
 	+ edit the cwapi/views.py to query all data from the database
 - create the project URLs, link the view to a URI in cwsite/urls.py
 - create the myapi/urls.py - router creates the URI for the API
+- commit and push changes -m 
+	"create a basic model, serializer, view and uri endpoint"
+	
+[31/March/2020]
+================================================================
+Development of a resource server
+================================================================
+- edit the cwsite/urls.py and add a v1 URL for the “cwapi” app 
+- make migrations
+
+================================================================
+Development of a testing application v1.0
+================================================================
+- Implement initial test cases (TC1 to TC7)
+
+
