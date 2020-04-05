@@ -71,7 +71,8 @@ Create a data model using Django ORM
 	+ add a Product class
 - make migrations
 - register the Product class in the admin site (cwapi/admin.py)
-- do some dummy data entry from http://193.61.36.152:8000/admin/cwapi/product/
+- do some dummy data entry from
+http://193.61.36.152:8000/admin/cwapi/product/
 
 ================================================================
 Setup Django REST framework
@@ -90,7 +91,7 @@ Create the URI endpoints to show data
 ================================================================
 - create a view to render the Products objects
 	+ edit the cwapi/views.py to query all data from the database
-- create the project URLs, link the view to a URI in cwsite/urls.py
+- create project URLs, link the view to a URI in cwsite/urls.py
 - create the myapi/urls.py - router creates the URI for the API
 - commit and push changes -m 
 	"create a basic model, serializer, view and uri endpoint"
@@ -107,4 +108,10 @@ Development of a testing application v1.0
 ================================================================
 - Implement initial test cases (TC1 to TC7)
 
+[05/April/2020]
+- Modify the data model to include item information:
+	+ item_id, item_title, date_posted, quantity, condition, 
+	description, expiry_date
+- Update admin.py, serializer.py, cwapi/urls.py, views.py,
+	and cwsite/urls.py accordingly.
 

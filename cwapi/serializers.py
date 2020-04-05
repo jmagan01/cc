@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from .models import Product
+from .models import Item
 
-class ProductSerializer(serializers.HyperlinkedModelSerializer):
+class ItemSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
-		model = Product
-		fields = ('title','description','quantity','category')
+		model = Item
+		fields = ('item_id','item_title','date_posted','quantity','condition','description','category','expiry_date')#,'seller')

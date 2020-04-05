@@ -16,11 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include #'include' added
 from rest_framework.routers import DefaultRouter
-from cwapi.views import ProductViewSet
+from cwapi.views import ItemViewSet
 
 router = DefaultRouter()
-router.register('cwapi', ProductViewSet)
-
+router.register('cwapi', ItemViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
