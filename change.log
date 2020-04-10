@@ -113,5 +113,9 @@ Development of a testing application v1.0
 	+ item_id, item_title, date_posted, quantity, condition, 
 	description, expiry_date
 - Update admin.py, serializer.py, cwapi/urls.py, views.py,
-	and cwsite/urls.py accordingly.
+	and cwsite/urls.py and testing app accordingly.
+	
+[10/April/2020]
+- Modify item categories
+
 
