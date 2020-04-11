@@ -28,5 +28,4 @@ urlpatterns = [
 	
 	# REST FRAMEWORK URLS
     path('', include('cwapi.urls')),
-    #path('v1/', include(router.urls)), #version 1 of my API
 ]

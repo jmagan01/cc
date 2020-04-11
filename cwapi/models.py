@@ -37,11 +37,18 @@ class Item(models.Model):
 	)
 	date_posted = models.DateTimeField(auto_now_add=True, blank=True)
 	expiry_date = models.DateTimeField()
+	seller = models.CharField(max_length = 25)
 	# seller = models.ForeignKey(
         # settings.AUTH_USER_MODEL,
         # on_delete=models.CASCADE,
     # )
-	seller = models.CharField(max_length = 25)
 	def __str__(self):
 		return self.item_title
+		
+class Auction(models.Model):
+	auction_id = models.AutoField(primary_key=True, unique=True)
+	item_id = models.ForeignKey('Item', on_delete=models.CASCADE)
+	time_left = models.DurationField()
+	def __str__(self):
+		return self.auction_id
 

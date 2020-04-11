@@ -3,8 +3,8 @@ from django.shortcuts import render
 # Create your views here.
 from rest_framework import viewsets
 from rest_framework import filters
-from .serializers import ItemSerializer
-from .models import Item
+from .serializers import *
+from .models import *
 
 # # Testing
 # from rest_framework import status
@@ -18,3 +18,9 @@ class ItemViewSet(viewsets.ModelViewSet):
 	serializer_class = ItemSerializer # This is from step 4.3
 	filter_backends = (filters.SearchFilter, )
 	search_fields = ['seller']
+	
+class AuctionViewSet(viewsets.ModelViewSet):
+	queryset = Auction.objects.all().order_by('time_left')
+	serializer_class = AuctionSerializer
+	#filter_backends = (filters.SearchFilter, )
+	#search_fields = ['seller']	
