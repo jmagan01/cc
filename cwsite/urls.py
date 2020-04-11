@@ -25,6 +25,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')), #add OAuth2 provider
     path('authentication/', include('users.urls')),
+	
+	# REST FRAMEWORK URLS
     path('', include('cwapi.urls')),
-    path('v1/', include(router.urls)), #version 1 of my API
+    #path('v1/', include(router.urls)), #version 1 of my API
 ]

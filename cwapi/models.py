@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Item(models.Model):
@@ -36,6 +37,10 @@ class Item(models.Model):
 	)
 	date_posted = models.DateTimeField(auto_now_add=True, blank=True)
 	expiry_date = models.DateTimeField()
+	# seller = models.ForeignKey(
+        # settings.AUTH_USER_MODEL,
+        # on_delete=models.CASCADE,
+    # )
 	seller = models.CharField(max_length = 25)
 	def __str__(self):
 		return self.item_title

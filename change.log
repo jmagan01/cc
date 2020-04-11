@@ -117,5 +117,6 @@ Development of a testing application v1.0
 	
 [10/April/2020]
 - Modify item categories
-
+- Modify ItemViewSet to allow searching/filtering by seller.
+- Implement Test Case 8
 
