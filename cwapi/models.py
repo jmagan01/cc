@@ -63,18 +63,17 @@ class Item(models.Model):
 	def get_absolute_url(self):
 		return reverse('item_list', args=[str(self.id)])
 		
-class Auction(models.Model):
+class Auction(Item):
 	auction_id = models.AutoField(
 		primary_key=True, 
 		unique=True,
 		verbose_name='Auction identifier')
-	item_id = models.ForeignKey('Item', on_delete=models.CASCADE)
 	time_left = models.DurationField(
 		verbose_name='Time left to complete'
 		)
 	
 	def __str__(self):
-		return self.auction_id
+		return self.item_title
 	
 	def get_absolute_url(self):
 		return reverse('auction_list', args=[str(self.id)])

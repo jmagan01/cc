@@ -4,10 +4,14 @@ from .models import *
 class ItemSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = Item
-		fields = ('item_id','item_title','date_posted','quantity',
-		'condition','description','category','expiry_date','seller')
+		#fields = ('item_id','item_title','date_posted','quantity',
+		#'condition','description','category','expiry_date','seller')
+		fields = '__all__'
 		
 class AuctionSerializer(serializers.HyperlinkedModelSerializer):
+	
 	class Meta:
 		model = Auction
-		fields = ('auction_id','item_id','time_left')
+		fields = (
+			'time_left','item_id','item_title', 'quantity', 'condition',
+			'description','category','seller')
