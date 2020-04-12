@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Item(models.Model):
-	CONDITIONS = (
+	CONDITION_TYPE = (
 		('N', 'New'),
 		('U', 'Used')
 	)
@@ -23,19 +23,31 @@ class Item(models.Model):
 		('T&E', 'Tools & Equipment'),
 		('TOY', 'Toys')	
 	)
-	item_id = models.AutoField(primary_key=True, unique=True)
-	item_title = models.CharField(max_length = 100)
-	quantity = models.IntegerField()
+	item_id = models.AutoField(
+		primary_key=True, 
+		unique=True,
+		verbose_name='Item identifier',)
+	item_title = models.CharField(
+		max_length = 100,
+		verbose_name='Item Title',)
+	quantity = models.IntegerField(
+		verbose_name='Quantity',)
 	condition =  models.CharField(
 		max_length = 1,
-		choices=CONDITIONS
+		choices=CONDITION_TYPE,
+		verbose_name='Condition of the Item'
 	)
-	description = models.CharField(max_length = 255)
+	description = models.CharField(
+		max_length = 255,
+		verbose_name='Item Description')
 	category = models.CharField(
 		max_length = 3,
-		choices=CATEGORIES
+		choices=CATEGORIES,
+		verbose_name='Item Category'
 	)
-	date_posted = models.DateTimeField(auto_now_add=True, blank=True)
+	date_posted = models.DateTimeField(
+		auto_now_add=True, 
+		blank=True)
 	expiry_date = models.DateTimeField()
 	seller = models.CharField(max_length = 25)
 	# seller = models.ForeignKey(
@@ -44,11 +56,25 @@ class Item(models.Model):
     # )
 	def __str__(self):
 		return self.item_title
+	
+	# The get_absolute_url() method sets a canonical URL for the model. 
+	# This is required when using the reverse() function. 
+	# It is the correct way to refer to a model in templates to avoid hard-coding.
+	def get_absolute_url(self):
+		return reverse('item_list', args=[str(self.id)])
 		
 class Auction(models.Model):
-	auction_id = models.AutoField(primary_key=True, unique=True)
+	auction_id = models.AutoField(
+		primary_key=True, 
+		unique=True,
+		verbose_name='Auction identifier')
 	item_id = models.ForeignKey('Item', on_delete=models.CASCADE)
-	time_left = models.DurationField()
+	time_left = models.DurationField(
+		verbose_name='Time left to complete'
+		)
+	
 	def __str__(self):
 		return self.auction_id
-
+	
+	def get_absolute_url(self):
+		return reverse('auction_list', args=[str(self.id)])
