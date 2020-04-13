@@ -109,14 +109,21 @@ Development of a testing application v1.0
 - Implement initial test cases (TC1 to TC7)
 
 [05/April/2020]
+================================================================
 - Modify the data model to include item information:
 	+ item_id, item_title, date_posted, quantity, condition, 
 	description, expiry_date
 - Update admin.py, serializer.py, cwapi/urls.py, views.py,
 	and cwsite/urls.py and testing app accordingly.
-	
+
 [10/April/2020]
+================================================================
 - Modify item categories
 - Modify ItemViewSet to allow searching/filtering by seller.
 - Implement Test Case 8
 
+[13/April/2020]
+================================================================
+- create Bid model, Bid serializer, Bid view and Bid url
+- create time_left property to Item model
+- create time_left field to ItemSerializer

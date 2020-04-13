@@ -17,5 +17,5 @@ class ItemView(viewsets.ModelViewSet):
 	search_fields = ['seller']
 	
 class BidView(viewsets.ModelViewSet):
-	queryset = Bid.objects.all().order_by('bid_amount')
+	queryset = Bid.objects.all().order_by('bid_price')
 	serializer_class = BidSerializer
