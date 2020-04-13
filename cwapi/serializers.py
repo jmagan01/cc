@@ -1,17 +1,18 @@
 from rest_framework import serializers
-from .models import *
+from .models import Bid, Item, Auction
+
+class AuctionSerializer(serializers.HyperlinkedModelSerializer):
+	class Meta:
+		model = Auction
+		fields = ('url', 'id', 'item_title', 'auction_status')
 
 class ItemSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = Item
-		#fields = ('item_id','item_title','date_posted','quantity',
-		#'condition','description','category','expiry_date','seller')
-		fields = '__all__'
+		fields = ('url','id','item_title','starting_price','date_posted',
+		'quantity', 'condition','description','category','expiry_date','seller')
 		
-class AuctionSerializer(serializers.HyperlinkedModelSerializer):
-	
+class BidSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
-		model = Auction
-		fields = (
-			'time_left','item_id','item_title', 'quantity', 'condition',
-			'description','category','seller')
+		model = Bid
+		fields = ('url','id','item_title','bidder','bid_amount','bid_timestamp')

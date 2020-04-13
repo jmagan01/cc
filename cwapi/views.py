@@ -6,21 +6,16 @@ from rest_framework import filters
 from .serializers import *
 from .models import *
 
-# # Testing
-# from rest_framework import status
-# from rest_framework.response import Response
-# from rest_framework.decorators import api_view
+class AuctionView(viewsets.ModelViewSet):
+	queryset = Auction.objects.all()
+	serializer_class = AuctionSerializer
 
-from django.contrib.auth.models import User
-
-class ItemViewSet(viewsets.ModelViewSet):
+class ItemView(viewsets.ModelViewSet):
 	queryset = Item.objects.all().order_by('expiry_date')
 	serializer_class = ItemSerializer # This is from step 4.3
 	filter_backends = (filters.SearchFilter, )
 	search_fields = ['seller']
 	
-class AuctionViewSet(viewsets.ModelViewSet):
-	queryset = Auction.objects.all().order_by('time_left')
-	serializer_class = AuctionSerializer
-	#filter_backends = (filters.SearchFilter, )
-	#search_fields = ['seller']	
+class BidView(viewsets.ModelViewSet):
+	queryset = Bid.objects.all().order_by('bid_amount')
+	serializer_class = BidSerializer
