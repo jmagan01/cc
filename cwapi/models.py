@@ -6,11 +6,58 @@ import string
 import random
 
 # Create your models here.
-class Item(models.Model):
+class Auction(models.Model):
+	STATUS_CLOSED, STATUS_ACTIVE = range(2)
+	STATUS_CHOICES = (
+		(STATUS_CLOSED, 'Closed'), 
+		(STATUS_ACTIVE, 'Active'))
+
+	item_title = models.CharField(
+		max_length = 100,
+		verbose_name = 'Item Title')
+	starting_price = models.DecimalField(
+		max_digits = 6, 
+		decimal_places = 2,
+		verbose_name = 'Starting Price')
+	seller = models.CharField(max_length = 25) #? Get it from oAuth
+	posted_timedate = models.DateTimeField(
+		auto_now_add=True, 
+		editable=False)
+	expiration_timedate = models.DateTimeField()
+	status = models.PositiveSmallIntegerField(
+		choices=STATUS_CHOICES,
+		default=STATUS_ACTIVE)
+	
+	@property
+	def time_left(self):
+		td = self.get_time_delta()
+		remaining_time = '{} Days, {} Hours, {} Minutes, {} Seconds'.format(0,0,0,0)
+		if td.total_seconds() > 0:
+			totalmin, seconds = divmod(td.seconds, 60)
+			hour, minutes = divmod(totalmin, 60)
+			remaining_time = '{} Days, {} Hours, {} Minutes, {} Seconds'.format(td.days,hour,minutes,seconds)
+		return remaining_time
+	
+	@property
+	def status(self):
+		td_sec = self.get_time_delta().total_seconds()
+		return Auction.STATUS_ACTIVE if td_sec > 0 else Auction.STATUS_CLOSED
+	
+	def get_time_delta(self):
+		return -1*(datetime.now() - self.expiration_timedate)
+	
+	#Metadata
+	class Meta:
+		ordering = ["-posted_timedate"]
+
+	def __str__(self):
+		return '%s' % (self.item_title)
+
+		
+class ItemDetail(models.Model):
 	CONDITION_TYPE = (
 		('N', 'New'),
-		('U', 'Used')
-	)
+		('U', 'Used'))
 	CATEGORIES = (
 		('A&C', 'Antiques & Collectibles'),
 		('AUT', 'Automotive'),
@@ -24,58 +71,27 @@ class Item(models.Model):
 		('OFF', 'Office Products'),
 		('S&V', 'Software & Videogames'),
 		('T&E', 'Tools & Equipment'),
-		('TOY', 'Toys')	
-	)
-	item_title = models.CharField(max_length=100,verbose_name='Item Title')
-	starting_price = models.DecimalField(max_digits=6, decimal_places=2,verbose_name='Starting Price')
-	quantity = models.IntegerField(verbose_name='Quantity')
-	condition = models.CharField(max_length = 1,choices=CONDITION_TYPE,verbose_name='Condition of the Item')
-	description = models.TextField(
-		verbose_name='Item Description')
-	category = models.CharField(max_length = 3,choices=CATEGORIES,verbose_name='Item Category')
-	date_posted = models.DateTimeField(auto_now_add=True, editable=False)
-	expiry_date = models.DateTimeField()
-	seller = models.CharField(max_length = 25) #? Get it from oAuth
-	
-	@property
-	def time_left(self):
-		td = abs(datetime.now() - self.expiry_date)
-		totalmin, seconds = divmod(td.seconds, 60)
-		hour, minutes = divmod(totalmin, 60)
-		return '{} Days, {} Hours, {} Minutes, {} Seconds'.format(td.days, hour,minutes,seconds)
-	
-	#default = models.DateTimeField(expiry_date)#datetime.now()
-	#
-	# def save(self, *args, **kargs):
-		# self.time_left = get_time_left()
-		# super().save(*args, **kargs)
-
-	def __str__(self):
-		return self.item_title
-	
-	# The get_absolute_url() method sets a canonical URL for the model. 
-	# This is required when using the reverse() function. 
-	# It is the correct way to refer to a model in templates to avoid hard-coding.
-	def get_absolute_url(self):
-		return reverse('item_list', args=[str(self.id)])
-
-class Auction(models.Model):
+		('TOY', 'Toys'))
 	item_title = models.OneToOneField(
-		'Item',
-		on_delete=models.CASCADE)
-	auction_status = models.CharField(max_length = 25)
-	auction_winer = models.CharField(max_length = 25)
-	#time_left = models.DateTimeField(verbose_name='Time left to complete')
-	
+		'Auction',
+		on_delete = models.CASCADE)
+	category = models.CharField(
+		max_length = 3,
+		choices = CATEGORIES,
+		verbose_name='Item Category')
+	condition = models.CharField(
+		max_length = 1,
+		choices = CONDITION_TYPE,
+		verbose_name = 'Condition of the Item')
+	quantity = models.IntegerField(verbose_name='Quantity')
+	description = models.TextField(verbose_name='Item Description')
+
 	def __str__(self):
-		return str(self.id)
-	
-	def get_absolute_url(self):
-		return reverse('auction_list', args=[str(self.id)])
+		return '%s' % (self.item_title)
 
 class Bid(models.Model):
 	item_title = models.ForeignKey(
-		'Item', 
+		'Auction', 
 		on_delete=models.CASCADE)
 	bidder = models.CharField(max_length = 25) #? Get it from oAuth
 	bid_price = models.DecimalField(max_digits=6, decimal_places=2, verbose_name='Bid')
@@ -83,6 +99,3 @@ class Bid(models.Model):
 	
 	def __str__(self):
 		return "%s %s %s" % (self.item_title, self.bidder, bid_price)
-	
-	def get_absolute_url(self):
-		return reverse('bid_list', args=[str(self.id)])

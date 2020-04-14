@@ -7,14 +7,20 @@ from .serializers import *
 from .models import *
 
 class AuctionView(viewsets.ModelViewSet):
-	queryset = Auction.objects.all()
+	queryset = Auction.objects.all().order_by('expiration_timedate')
 	serializer_class = AuctionSerializer
-
-class ItemView(viewsets.ModelViewSet):
-	queryset = Item.objects.all().order_by('expiry_date')
-	serializer_class = ItemSerializer # This is from step 4.3
 	filter_backends = (filters.SearchFilter, )
 	search_fields = ['seller']
+
+class ItemDetailView(viewsets.ModelViewSet):
+	queryset = ItemDetail.objects.all()
+	serializer_class = ItemDetailSerializer # This is from step 4.3
+	
+# class AuctionDetailView(viewsets.ModelViewSet):
+	# queryset = Auction.objects.all().order_by('expiration_timedate')
+	# serializer_class = AuctionDetailSerializer
+	# filter_backends = (filters.SearchFilter, )
+	# search_fields = ['seller', 'status']
 	
 class BidView(viewsets.ModelViewSet):
 	queryset = Bid.objects.all().order_by('bid_price')

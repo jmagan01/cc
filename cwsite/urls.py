@@ -19,8 +19,9 @@ from rest_framework.routers import DefaultRouter
 from cwapi.views import *
 
 router = DefaultRouter()
-router.register('cwapi', ItemView)
+router.register('cwapi', ItemDetailView)
 router.register('cwapi', AuctionView)
+#router.register('cwapi', AuctionDetailView)
 router.register('cwapi', BidView)
 
 urlpatterns = [

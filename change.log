@@ -127,3 +127,5 @@ Development of a testing application v1.0
 - create Bid model, Bid serializer, Bid view and Bid url
 - create time_left property to Item model
 - create time_left field to ItemSerializer
+- rename Item model to ItemDetail
+- make Auction model the main fact table

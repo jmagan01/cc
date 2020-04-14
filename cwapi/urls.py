@@ -4,8 +4,9 @@ from rest_framework import routers
 from . import views
 
 router = routers.DefaultRouter()
-router.register(r'items', views.ItemView)
+router.register(r'items', views.ItemDetailView)
 router.register(r'auctions', views.AuctionView)
+#router.register(r'auctionDetails', views.AuctionDetailView)
 router.register(r'bids', views.BidView)
 
 urlpatterns = [
