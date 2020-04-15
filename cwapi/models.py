@@ -12,13 +12,10 @@ class Auction(models.Model):
 		(STATUS_CLOSED, 'Closed'), 
 		(STATUS_ACTIVE, 'Active'))
 
-	item_title = models.CharField(
+	item_name = models.CharField(
 		max_length = 100,
 		verbose_name = 'Item Title')
-	starting_price = models.DecimalField(
-		max_digits = 6, 
-		decimal_places = 2,
-		verbose_name = 'Starting Price')
+	ask_price = models.PositiveIntegerField(verbose_name = 'Starting Price')
 	seller = models.CharField(max_length = 25) #? Get it from oAuth
 	posted_timedate = models.DateTimeField(
 		auto_now_add=True, 
@@ -51,7 +48,7 @@ class Auction(models.Model):
 		ordering = ["-posted_timedate"]
 
 	def __str__(self):
-		return '%s' % (self.item_title)
+		return '%s' % (self.item_name)
 
 		
 class ItemDetail(models.Model):
@@ -72,8 +69,9 @@ class ItemDetail(models.Model):
 		('S&V', 'Software & Videogames'),
 		('T&E', 'Tools & Equipment'),
 		('TOY', 'Toys'))
-	item_title = models.OneToOneField(
+	item_name = models.OneToOneField(
 		'Auction',
+		 related_name='items', 
 		on_delete = models.CASCADE)
 	category = models.CharField(
 		max_length = 3,
@@ -87,7 +85,7 @@ class ItemDetail(models.Model):
 	description = models.TextField(verbose_name='Item Description')
 
 	def __str__(self):
-		return '%s' % (self.item_title)
+		return '%s' % (self.item_name)
 
 class Bid(models.Model):
 	item_title = models.ForeignKey(
