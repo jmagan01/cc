@@ -18,12 +18,12 @@ class Auction(models.Model):
 	ask_price = models.PositiveIntegerField(verbose_name = 'Starting Price')
 	seller = models.CharField(max_length = 25) #? Get it from oAuth
 	posted_timedate = models.DateTimeField(
-		auto_now_add=True, 
-		editable=False)
+		auto_now_add = True, 
+		editable = False)
 	expiration_timedate = models.DateTimeField()
-	status = models.PositiveSmallIntegerField(
-		choices=STATUS_CHOICES,
-		default=STATUS_ACTIVE)
+	auction_status = models.PositiveSmallIntegerField(
+		choices = STATUS_CHOICES,
+		default = STATUS_ACTIVE)
 	
 	@property
 	def time_left(self):
@@ -36,7 +36,7 @@ class Auction(models.Model):
 		return remaining_time
 	
 	@property
-	def status(self):
+	def auction_status(self):
 		td_sec = self.get_time_delta().total_seconds()
 		return Auction.STATUS_ACTIVE if td_sec > 0 else Auction.STATUS_CLOSED
 	
@@ -48,7 +48,7 @@ class Auction(models.Model):
 		ordering = ["-posted_timedate"]
 
 	def __str__(self):
-		return '%s' % (self.item_name)
+		return 'Auction %s - %s' % (self.id, self.item_name)
 
 		
 class ItemDetail(models.Model):
@@ -71,7 +71,7 @@ class ItemDetail(models.Model):
 		('TOY', 'Toys'))
 	auction_id = models.OneToOneField(
 		'Auction',
-		 related_name='items', 
+		 related_name = 'items', 
 		on_delete = models.CASCADE)
 	item_description = models.TextField(verbose_name='Item Description')
 	item_quantity = models.IntegerField(verbose_name='Quantity')
@@ -85,7 +85,7 @@ class ItemDetail(models.Model):
 		verbose_name = 'Condition of the Item')
 
 	def __str__(self):
-		return '%s' % (self.item_id)
+		return 'Item %s - %s' % (self.id, self.auction_id.item_name)
 
 class Bid(models.Model):
 	item_id = models.ForeignKey(
