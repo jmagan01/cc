@@ -7,11 +7,13 @@ class ItemDetailSerializer(serializers.HyperlinkedModelSerializer):
 		fields = [
 			'url',
 			'id',
-			'item_name',
-			'category',
-			'condition',
-			'quantity',
-			'description',
+			'auction_id',
+			'item_description',
+			'item_quantity',
+			'item_category',
+			'item_condition',
+			#'item_id',
+			#'item_name',
 		]
 		
 class AuctionSerializer(serializers.HyperlinkedModelSerializer):
@@ -22,12 +24,11 @@ class AuctionSerializer(serializers.HyperlinkedModelSerializer):
 			'url',
 			'id',
 			'item_name',
-			'item_details', #nested serializer
 			'ask_price',
+			'item_details', #nested serializer
 			'seller',
 			'expiration_timedate',
 		]
-		#depth = 1
 
 # class AuctionDetailSerializer(serializers.HyperlinkedModelSerializer):
 	# item_details = ItemDetailSerializer(read_only=True)
@@ -50,4 +51,5 @@ class AuctionSerializer(serializers.HyperlinkedModelSerializer):
 class BidSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = Bid
-		fields = ['url','id','item_title','bidder','bid_price','bid_timestamp']
+		fields = ['url','id',
+			'item_id','item_title','bidder','bid_price','bid_timestamp']

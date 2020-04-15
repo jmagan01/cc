@@ -69,26 +69,26 @@ class ItemDetail(models.Model):
 		('S&V', 'Software & Videogames'),
 		('T&E', 'Tools & Equipment'),
 		('TOY', 'Toys'))
-	item_name = models.OneToOneField(
+	auction_id = models.OneToOneField(
 		'Auction',
 		 related_name='items', 
 		on_delete = models.CASCADE)
-	category = models.CharField(
+	item_description = models.TextField(verbose_name='Item Description')
+	item_quantity = models.IntegerField(verbose_name='Quantity')
+	item_category = models.CharField(
 		max_length = 3,
 		choices = CATEGORIES,
 		verbose_name='Item Category')
-	condition = models.CharField(
+	item_condition = models.CharField(
 		max_length = 1,
 		choices = CONDITION_TYPE,
 		verbose_name = 'Condition of the Item')
-	quantity = models.IntegerField(verbose_name='Quantity')
-	description = models.TextField(verbose_name='Item Description')
 
 	def __str__(self):
-		return '%s' % (self.item_name)
+		return '%s' % (self.item_id)
 
 class Bid(models.Model):
-	item_title = models.ForeignKey(
+	item_id = models.ForeignKey(
 		'Auction', 
 		on_delete=models.CASCADE)
 	bidder = models.CharField(max_length = 25) #? Get it from oAuth
@@ -96,4 +96,4 @@ class Bid(models.Model):
 	bid_timestamp = models.DateTimeField(auto_now_add=True, blank=True, editable=False)
 	
 	def __str__(self):
-		return "%s %s %s" % (self.item_title, self.bidder, bid_price)
+		return "%s %s %s" % (self.id, self.bidder, bid_price)
