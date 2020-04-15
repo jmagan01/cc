@@ -23,7 +23,7 @@ class AuctionSerializer(serializers.HyperlinkedModelSerializer):
 		fields = [
 			'url',
 			'id',
-			#'auction_status',
+			'auction_status',
 			'item_name',
 			'ask_price',
 			'item_details', #nested serializer
