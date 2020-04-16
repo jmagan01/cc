@@ -7,10 +7,6 @@ import random
 
 # Create your models here.
 class Auction(models.Model):
-	STATUS_CLOSED, STATUS_ACTIVE = range(2)
-	STATUS_CHOICES = (
-		(STATUS_CLOSED, 'Closed'), 
-		(STATUS_ACTIVE, 'Active'))
 
 	item_name = models.CharField(
 		max_length = 100,
@@ -21,9 +17,10 @@ class Auction(models.Model):
 		auto_now_add = True, 
 		editable = False)
 	expiration_timedate = models.DateTimeField()
-	auction_status = models.PositiveSmallIntegerField(
-		choices = STATUS_CHOICES,
-		default = STATUS_ACTIVE)
+	is_active = models.BooleanField()
+	auction_status = models.CharField(
+		max_length = 15, 
+		default = "Open to offers")
 	
 	@property
 	def time_left(self):
@@ -35,13 +32,18 @@ class Auction(models.Model):
 			remaining_time = '{} Days, {} Hours, {} Minutes, {} Seconds'.format(td.days,hour,minutes,seconds)
 		return remaining_time
 	
-	@property
-	def auction_status(self):
-		td_sec = self.get_time_delta().total_seconds()
-		return Auction.STATUS_ACTIVE if td_sec > 0 else Auction.STATUS_CLOSED
-	
+	#def get_auction_status(self):
+	#	return "Open to offers" if self.is_active() else "Completed"
+
 	def get_time_delta(self):
-		return -1*(datetime.now() - self.expiration_timedate)
+		return self.expiration_timedate - datetime.now()
+	
+	def is_active(self):
+		return self.get_time_delta().total_seconds() > 0
+	
+	def save(self, *args, **kwargs):
+		self.is_active = self.get_time_delta().total_seconds() > 0
+		super(Auction, self).save(*args, **kwargs)
 	
 	#Metadata
 	class Meta:

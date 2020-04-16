@@ -16,20 +16,20 @@ class ItemDetailSerializer(serializers.HyperlinkedModelSerializer):
 		
 class AuctionSerializer(serializers.HyperlinkedModelSerializer):
 	item_details = ItemDetailSerializer(source='items', read_only=True)
-	#time_left = serializers.DateField(required=False)
 
 	class Meta:
 		model = Auction
 		fields = [
 			'url',
 			'id',
-			'auction_status',
 			'item_name',
-			'ask_price',
 			'item_details', #nested serializer
-			'seller',
+			'is_active',
+			'auction_status',
+			'ask_price',
+			'time_left',
 			'expiration_timedate',
-			#'time_left',
+			'seller',
 		]
 
 class BidSerializer(serializers.HyperlinkedModelSerializer):

@@ -6,11 +6,15 @@ from rest_framework import filters
 from . serializers import *
 from . models import *
 
+from url_filter.integrations.drf import DjangoFilterBackend
+
 class AuctionView(viewsets.ModelViewSet):
-	queryset = Auction.objects.all().order_by('expiration_timedate')
+	queryset = Auction.objects.all().order_by('-expiration_timedate')
 	serializer_class = AuctionSerializer
-	filter_backends = (filters.SearchFilter,) #do not delete the comma
-	search_fields = ['seller',]
+	filter_backends = (filters.SearchFilter, DjangoFilterBackend,) #do not delete the comma
+	search_fields = ['seller', ]
+	#filter_backends = [DjangoFilterBackend]
+	#filter_fields = ('is_active', )
 
 class ItemDetailView(viewsets.ModelViewSet):
 	queryset = ItemDetail.objects.all()
