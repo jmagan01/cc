@@ -129,3 +129,19 @@ Development of a testing application v1.0
 - create time_left field to ItemSerializer
 - rename Item model to ItemDetail
 - make Auction model the main fact table
+
+[16/April/2020]
+================================================================
+- tests POST requests for auction and itemDetail
+- add is_active flag and auction_status for auction model
+
+[17/April/2020]
+================================================================
+- Implement filters by seller and greater then expiration date
+ 
+
+
+
+
+
+

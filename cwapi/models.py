@@ -73,7 +73,7 @@ class Auction(models.Model):
 
 
 class Bid(models.Model):
-	item_id = models.ForeignKey(
+	auction_id = models.ForeignKey(
 		'Auction', 
 		on_delete = models.CASCADE)
 	bidder_name = models.CharField(max_length = 25) #? Get it from oAuth
@@ -81,7 +81,7 @@ class Bid(models.Model):
 	bid_timestamp = models.DateTimeField(auto_now_add = True, blank = False, editable = False)
 	
 	def save(self, *args, **kwargs):
-		if Bid.item_id.is_active:
+		if Bid.auction_id.is_active:
 			#Save bid in database
 			super(Bid, self).save(*args, **kwargs) #Real save
 		else: 

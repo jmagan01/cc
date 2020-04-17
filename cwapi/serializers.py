@@ -35,7 +35,7 @@ class BidSerializer(serializers.HyperlinkedModelSerializer):
 		model = Bid
 		fields = [
 			'url','id',
-			'item_id',
+			'auction_id',
 			'bidder_name',
 			'bid_price',
 			]
