@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'oauth2_provider', #The OAuth2
     'rest_framework', #The REST API
+	'django_filters', #For filtering
     'users', #users application
     'cwapi', #api application
 ]
@@ -62,6 +63,9 @@ REST_FRAMEWORK = {
 	'DEFAULT_PERMISSION_CLASSES': (
 		'rest_framework.permissions.IsAuthenticated',
 	),
+	'DEFAULT_FILTER_BACKENDS': [
+		'django_filters.rest_framework.DjangoFilterBackend'
+	],
 }
 
 AUTHENTICATION_BACKENDS = (
