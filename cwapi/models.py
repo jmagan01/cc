@@ -9,6 +9,17 @@ from django.utils.translation import gettext_lazy as _
 
 # Other useful libraries
 from datetime import datetime
+from django.db.models import Max
+from django.db.models import Value
+
+
+# Get the record with the maximum bid_price for a specific auction_id
+def get_winner(id):
+	auction_data = Bid.objects.filter(auction_id=id)
+	max_bid_price = Bid.objects.aggregate(Max('bid_price'))['bid_price__max']
+	winner_instance = Bid.objects.get(bid_price=max_bid_price)
+	winner_instance.bidder
+	return winner_instance.bidder
 
 # Create your models here.
 class Auction(models.Model):
@@ -72,7 +83,8 @@ class Auction(models.Model):
 	
 	expiration_timedate = models.DateTimeField(
 		# Use a custom validator
-		validators = [is_in_the_future])
+		#validators = [is_in_the_future]
+		)
 		
 	last_update = models.DateTimeField(
 		# Automatically set the field to now every time the object is saved
@@ -84,10 +96,10 @@ class Auction(models.Model):
 		return self.expiration_timedate - datetime.now()
 	
 	def is_active(self):
-		return self.get_time_delta().total_seconds() > 0
-		
-	def update_auction_status(self):
-		return "Open to offers" if self.is_active() else "Completed"
+		active = self.get_time_delta().total_seconds() > 0
+		if not active:
+			self.close_auction_and_save()
+		return active
 
 	def time_left(self):
 		td = self.get_time_delta()
@@ -99,26 +111,20 @@ class Auction(models.Model):
 		return remaining_time
 	
 	def close_auction(self):
-		seld.auction_status = "Completed"
-		# self.auction_winner = get name of best bidder from Bid table
-		# see https://stackoverflow.com/questions/844591/how-to-do-select-max-in-django
-	
-	def save(self, *args, **kwargs):
-		# check if the auction is still open before saving data
-		if not self.is_active:
-			# deadline has passed, close the auction
-			self.close_auction()
-		else:
-			print("auction still active")
-			# auction still open, save the data.
-		super(Auction, self).save(*args, **kwargs) #Real save
+		self.auction_status = "Completed"
+		self.auction_winner = get_winner(self.id)
+
+	def close_auction_and_save(self, *args, **kwargs):
+		self.close_auction() # update some fields
+		super(Auction, self).save(*args, **kwargs) #real save
 	
 	#Metadata
 	class Meta:
-		ordering = ["-posted_timedate"]
+		ordering = ["-expiration_timedate"]
 
 	def __str__(self):
 		return 'Auction %s - %s' % (self.id, self.item_name)
+
 
 class Bid(models.Model):
 
@@ -126,20 +132,6 @@ class Bid(models.Model):
 		if value <= 0:
 			raise ValidationError(_('%(value) must be a positive number'), 
 				params = {'value': value},)
-	
-	# Custom validators			
-	# def is_not_seller(self, data):
-		# """
-        # Check that bidder is not the seller
-        # """
-		# if self.bidder == "mary":
-			# raise ValidationError("The seller cannot bid for its own item")
-
-	# def	update_auction(self, bid_price, bidder_name):
-		# if bid_price > self.current_bid_price:
-			# self.best_bidder_name = bidder_name 
-			# self.current_bid_price = bid_price
-		# return self.best_bidder_name, self.current_bid_price
 	
 	# Model fields
 	auction_id = models.ForeignKey(
@@ -166,7 +158,8 @@ class Bid(models.Model):
 	
 	def __str__(self):
 		return 'Bid %s - %s - £ %s - %s' % (self.id, self.bidder, self.bid_price, self.bid_timestamp)
-		
+
+
 class ItemDetail(models.Model):
 	"""
 	This model holds additional details about the item to be auctioned.
