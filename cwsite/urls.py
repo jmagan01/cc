@@ -20,9 +20,8 @@ from cwapi.views import *
 
 router = DefaultRouter()
 router.register('cwapi', ItemDetailView)
-router.register('cwapi', AuctionView)
-#router.register('cwapi', AuctionDetailView)
 router.register('cwapi', BidView)
+router.register('cwapi', AuctionView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

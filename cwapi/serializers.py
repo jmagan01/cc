@@ -31,11 +31,11 @@ class AuctionSerializer(serializers.HyperlinkedModelSerializer):
 		required=False, #Non-compulsory information
 		read_only=True)
 		
-	bid_activity = BidSerializer(
-		source='bids',
-		many=True,
-		required=False, #Non-compulsory information
-		read_only=True)
+	# bid_activity = BidSerializer(
+		# source='bids',
+		# many=True,
+		# required=False, #Non-compulsory information
+		# read_only=True)
 
 	class Meta:
 		model = Auction
@@ -47,14 +47,16 @@ class AuctionSerializer(serializers.HyperlinkedModelSerializer):
 			'ask_price',
 			'is_active',
 			'auction_status',
-			'expiration_timedate',
+			'expiration_datetime',
 			'time_left',
 			'auction_winner',
-			'bid_activity', #Nested serializer
+			'purchase_price',
+			#'bid_activity', #Nested serializer
 			]
 		read_only_fields = [
 			'is_active',
 			'auction_status',
 			'time_left',
 			'auction_winner',
+			'purchase_price',
 			]
