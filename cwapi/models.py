@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.core import validators
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+from django.shortcuts import get_object_or_404
 
 # Other useful libraries
 from datetime import datetime
@@ -15,16 +16,20 @@ from django.db.models import Value
 # Some generic functions
 
 # Get the record with the maximum bid_price for a specific auction
-def get_winner_instance(auction_id):
-	auction_data = Bid.objects.filter(auction_id=auction_id)
-	max_bid_price = auction_data.aggregate(Max('bid_price'))['bid_price__max']
-	winner_instance = Bid.objects.get(bid_price=max_bid_price)
-	return winner_instance
+def get_winner_instance(id):
+	try:
+		auction_data = Bid.objects.filter(auction_id=id)
+		max_bid_price = auction_data.aggregate(Max('bid_price'))['bid_price__max']
+		return Bid.objects.get(bid_price=max_bid_price)
+	except Bid.DoesNotExist:
+		return None
 
-# def get_sellers():
-	# auction_instance = Auction.objects.filter(auction_id=auction_id)
-	# print(auction_instance.seller)
-	#return auction_instance.seller
+
+def get_seller(auction_id):
+		auction_instance = Auction.objects.filter(auction_id=auction_id)
+		return auction_instance.seller
+		
+
 
 # Create your models here.
 class Auction(models.Model):
@@ -84,11 +89,11 @@ class Auction(models.Model):
 		blank=False,)
 	
 	auction_winner = models.CharField(
-		# Explicit validation, not null, not blank
+		# Explicit validation, not blank, not null
 		blank=False,
 		null=False,
 		max_length=25,
-		default="To be confirmed")
+		default="TBC")
 	
 	purchase_price = models.DecimalField(
 		max_digits=12,
@@ -126,10 +131,15 @@ class Auction(models.Model):
 		return remaining_time
 	
 	def close_auction(self):
-		self.auction_status = "Completed"
 		winner = get_winner_instance(self.id)
-		self.auction_winner = winner.bidder
-		self.purchase_price = winner.bid_price
+		if winner is not None:
+			self.auction_status = "Completed"
+			self.auction_winner = winner.bidder
+			self.purchase_price = winner.bid_price
+		else:
+			print("No bids found")
+			self.auction_status = "Closed: No Bids received"
+			self.auction_winner = "Not applicable"
 
 	def close_auction_and_save(self, *args, **kwargs):
 		self.close_auction() # close it, set winner and purchase price
@@ -149,10 +159,6 @@ class Bid(models.Model):
 		if value <= 0:
 			raise ValidationError(_('%(value) must be a positive number'), 
 				params = {'value': value},)
-				
-	# def is_not_seller(value):
-		# if name == "mary": #get_item_owner(auction_id):
-			# raise ValidationError('Not allowed!')
 
 	# Model fields
 	auction_id = models.ForeignKey(
@@ -178,10 +184,18 @@ class Bid(models.Model):
 		auto_now_add=True,
 		blank=False,)
 		
+	def validate_bidder(self):
+        # Don't allow entries where the bidder and seller are the same person
+		if self.bidder == self.auction_id.seller:
+			raise Exception(_('Invalid input value: Bidder=Seller'))
+		else:
+			print("Bid accepted")
+
 	# Conditional save
-	# def save(self, *args, **kwargs):
-		# if not is_seller(self.bidder, self.auction_id):
-			# super(Auction, self).save(*args, **kwargs) #real save
+	def save(self, *args, **kwargs):
+		self.validate_bidder()
+		super(Bid, self).save(*args, **kwargs) #real save
+		
 	
 	def __str__(self):
 		return 'Bid %s - %s - £ %s - %s' % (self.id, self.bidder, self.bid_price, self.bid_timestamp)
@@ -216,8 +230,6 @@ class ItemDetail(models.Model):
 		#primary_key=True, #django won’t add the automatic id column.
 		related_name='item_details',
 		on_delete = models.CASCADE)
-	
-	#owner = Auction.seller
 	
 	item_description = models.TextField(
 		# Field is optional

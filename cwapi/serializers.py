@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from . models import *
-from datetime import datetime
+from rest_framework.serializers import ValidationError
+
+
 
 class ItemDetailSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -15,6 +17,7 @@ class ItemDetailSerializer(serializers.ModelSerializer):
 			]
 
 class BidSerializer(serializers.ModelSerializer):
+	seller = serializers.ReadOnlyField(source='Auction.seller')
 	class Meta:
 		model = Bid
 		fields = [
@@ -22,6 +25,7 @@ class BidSerializer(serializers.ModelSerializer):
 			'auction_id',
 			'bid_price',
 			'bidder',
+			'seller'
 			]
 
 class AuctionSerializer(serializers.HyperlinkedModelSerializer):
